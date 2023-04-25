@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="js/blockly_compressed.js"></script>
+    <script src="js/fr.js"></script>
+    <script src="js/python.js"></script>
+</head>
+<body>
+
+    <div id="blocklyDiv" style="height: 480px; width: 600px;"></div>
+    <xml id="toolbox" style="display: none">
+        <block type="playsound"></block>
+        <block type="os_system"></block>
+        <block type="wait"></block>
+    </xml>
+    <script>
+        var workspace = Blockly.inject('blocklyDiv', {toolbox: document.getElementById('toolbox')});
+
+
+        Blockly.Blocks['wait'] = {
+            init: function() {
+              this.appendValueInput("seconds")
+                  .setCheck("Number")
+                  .appendField("Attendre");
+              this.appendDummyInput()
+                  .appendField("secondes");
+              this.setPreviousStatement(true, null);
+              this.setNextStatement(true, null);
+              this.setColour(230);
+            }
+          };
+          
+          Blockly.Python['wait'] = function(block) {
+            var seconds = Blockly.Python.valueToCode(block, 'seconds', Blockly.Python.ORDER_ATOMIC);
+            return 'time.sleep(' + seconds + ')\n';
+          };
+          
+          
+    </script>
+</body>
+</html>

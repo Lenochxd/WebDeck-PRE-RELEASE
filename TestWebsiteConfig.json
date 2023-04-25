@@ -1,0 +1,157 @@
+{
+    "settings": {
+        "ear-soundboard": "true",
+        "mp3_method": "vlc",
+        "show-console": "false",
+        "dev-mode": "false",
+        "spotify-api": {
+            "USERNAME": "lenochyt",
+            "CLIENT_ID": "c1e53c04410e472d8078a5258d8012b1",
+            "CLIENT_SECRET": "44f1e3dcbf2c43a2acc80f7b1508d93c"
+        }
+    },
+    "front": {
+        "theme": "theme1.css",
+        "background": "",
+        "show-names": "true",
+        "names-color": "#b3b3b3",
+        "computer-usage-reload-time": "3000",
+        "size": "5x3",
+        "buttons": {
+            "index": [
+                {
+                    "name": "Dossier",
+                    "position": "a1",
+                    "image": "folder.png",
+                    "image_size": "70%",
+                    "message": "/folder soundboard"
+                },
+                {
+                    "name": "Rafraichir la page",
+                    "position": "a2",
+                    "image": "reload.png",
+                    "image_size": "50%",
+                    "message": "/reload"
+                },
+                {
+                    "name": "Plein \u00e9cran",
+                    "position": "a3",
+                    "image": "fullscreen2.png",
+                    "image_size": "50%",
+                    "message": "/fullscreen"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "name": "Utilisation CPU",
+                    "position": "a5",
+                    "image": "",
+                    "image_size": "100%",
+                    "color": "#fff",
+                    "background-color": "#2e2e2e",
+                    "message": "/usage 'CPU USAGE' usage_dict['cpu']['usage_percent']"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "name": "bouton styl\u00e9 (factice)",
+                    "position": "c1",
+                    "image": "jaaj.png",
+                    "image_size": "90%",
+                    "background-color": "#91a2ff",
+                    "message": "playsound audio3.mp3"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "name": "J'ai tout test\u00e9 :D",
+                    "position": "c5",
+                    "image": "valid.png",
+                    "image_size": "50%",
+                    "background-color": "91a2ff",
+                    "message": "/open-modal"
+                }
+            ],
+            "soundboard": [
+                {
+                    "name": "Retour",
+                    "image": "back10.svg",
+                    "image_size": "120%",
+                    "message": "/folder index"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "VOID": "VOID"
+                },
+                {
+                    "name": "bouton styl\u00e9 (factice)",
+                    "position": "c5",
+                    "image": "jop3.png",
+                    "image_size": "100%",
+                    "background-color": "#32a883",
+                    "message": "playsound audio3.mp3"
+                }
+            ]
+        }
+    },
+    "url": {
+        "ip": "0.0.0.0",
+        "port": 8000
+    }
+}

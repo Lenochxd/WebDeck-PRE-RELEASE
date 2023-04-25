@@ -1,0 +1,850 @@
+<html>
+  <head>
+    <title>WebDeck</title>
+    <link rel="stylesheet" href="static/themes/{{config['front']['theme']}}">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <link rel="icon" href="static\files\icon.ico" />
+    <meta charset="UTF-8">
+
+
+    <!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+
+  </head>
+  <body>
+    <div id="loading-screen">
+      <p>Chargement...</p>
+    </div>
+
+
+    {% if config["settings"]["show-console"].lower() == "true" %}
+      <form id="form">
+        <label style="color: white;">Console:</label><br>
+        <input type="text" class="message"><br>
+        <button type="submit">Submit</button>
+      </form>
+    {% endif %}
+
+    <!--
+    <p id="print1">_</p>
+    <p id="print2">_</p>
+    -->
+
+    <style>
+      
+      {% if config["front"]["background"] and not config["front"]["background"].strip() == "" %}
+        body {
+          {% if '.' in config["front"]["background"] %}
+            background-image: url("static/files/background-image")!important;
+            background-size: cover;
+            background-color: transparent;
+          {% else %}
+            background-color: {{config["front"]["background"]}}!important;
+            background-image: none;
+          {% endif %}
+        }
+      {% endif %}
+      
+      {% for folder_id, value in config["front"]["buttons"].items() %}
+        {% for button_config in config["front"]["buttons"][folder_id] %}
+          {% if 'background-color' in button_config.keys() %}
+            @keyframes animation-{{ button_config['background-color'].replace('#','') }} {
+              100% {background-color: #{{ button_config['background-color'].replace('#','') }};}
+              100% {background-color: none;}
+            }
+            .button-{{ button_config['background-color'].replace('#','') }}, .button-{{ button_config['background-color'].replace('#','') }}:focus {
+              background-color: #{{ button_config['background-color'].replace('#','') }};
+              box-shadow: #{{ button_config['background-color'].replace('#','') }} 0 1px 3px 0;
+              color: rgba(0, 0, 0, 0.85);
+            }
+            .button-{{ button_config['background-color'].replace('#','') }}:hover {
+              transform: translateY(-1px);
+              animation-name: animation-{{ button_config['background-color'].replace('#','') }};
+              animation-duration: 1s;
+            } 
+            .button-{{ button_config['background-color'].replace('#','') }}:active {
+              background-color: #{{ button_config['background-color'].replace('#','') }};
+              border-color: rgba(0, 0, 0, 0.15);
+              box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+              color: rgba(0, 0, 0, 0.65);
+              transform: translateY(0);
+            }
+          {% endif %}
+        {% endfor %}
+      {% endfor %}
+    </style>
+
+    {% for folder_id, value in config["front"]["buttons"].items() %}
+      <div id="folder-{{ folder_id }}" class="buttons-center">
+        <div id="folder-{{ folder_id }}" class="all-buttons">
+          {% for button_config in config["front"]["buttons"][folder_id] %}
+            {% set button_id = config["front"]["buttons"][folder_id].index(button_config) %}
+            {% set onclick = 'type=submit' %}
+            {% if not 'VOID' in button_config %}
+              {% if button_config["message"].startswith("/folder") %}
+                {% set onclick = 'onclick=' + 'folder_' + button_config['message'].replace('/folder ', '') + '()' %}
+              {% endif %}
+            {% endif %}
+          {% if not 'VOID' in button_config %}
+            <form class="form-{{ button_id }}" id="form">
+              <input type="hidden" class="message" value="{{ button_config['message'] }}">
+
+                {% set class = "button" %}
+                {% if 'background-color' in config["front"]["buttons"][folder_id][button_id].keys() %}
+                  {% set class = class + ' button-'+button_config['background-color'].replace('#','') %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/fullscreen' %}
+                  {% set class = class + " fullscreen-btn" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/zoom in' %}
+                  {% set class = class + " zoom-in-btn" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/zoom out' %}
+                  {% set class = class + " zoom-out-btn" %}
+                  {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/buttons-div expand' %}
+                  {% set class = class + " expand-btn" %}
+                  {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/buttons-div shrink' %}
+                  {% set class = class + " shrink-btn" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/box-zoom-out' %}
+                  {% set class = class + " box-zoom-out" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/box-zoom-in' %}
+                  {% set class = class + " box-zoom-in" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/page-dezoom' %}
+                  {% set class = class + " dezoom-btn" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/page-zoom' %}
+                  {% set class = class + " zoom-btn" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/open-modal' %}
+                  {% set class = class + " open-modal" %}
+                {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["message"] == '/open-config' %}
+                  {% set class = class + " open-modal" %}
+                {% endif %}
+
+
+                {% set fill = '' %}
+                  {% if 'color' in config["front"]["buttons"][folder_id][button_id].keys() %}
+                    {% if config["front"]["buttons"][folder_id][button_id]["color"] == 'invert' %}
+                      {% set fill = 'filter: invert(1)' %}
+                    {% else %}
+                      {% set fill = 'fill:'+ config["front"]["buttons"][folder_id][button_id]["color"] +';'+' color:'+ config["front"]["buttons"][folder_id][button_id]["color"] +';' %}
+                    {% endif %}
+                  {% endif %}
+                {% if config["front"]["buttons"][folder_id][button_id]["image"] == "" %}
+                
+                  <button {{ onclick }} class="{{class}}" role="button">
+                    <!--|||||||||||||||||||||||-->
+                    {% set usage_dict = {"cpu":{"usage_percent":0.0},"memory":{"total_gb":0.0,"used_gb":0.0,"available_gb":0.0,"usage_percent":0.0},"disks":{"C":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0},"D":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0},"E":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0},"F":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0}},"network":{"bytes_sent":0,"bytes_recv":0},"gpus":{"0":{"name":"GPU_NAME","memory_used":0.0,"memory_total":0.0,"utilization_percent":0.0}}} %}
+                    {% if button_config['message'].startswith('/usage') %}
+                      {% set name = button_config['message'].replace("'",'"',2).split('"')[1] %}
+                      {% set path = button_config['message'].replace("'",'"',2).split('"')[2] %}
+                      {% if button_config['message'].split()[1] %}
+                        <div class="usage">
+                          <div class="usage-title {{ path.replace("'",'"').replace('"]["','.').replace('"]','').replace('["','.') }}" style="{{fill}}">
+                            {{ name }}
+                          </div>
+                          {% set usage_value = '-' %}
+                          <div class="usage-value {{ path.replace("'",'"').replace('"]["','.').replace('"]','').replace('["','.') }}" style="{{fill}}">
+                            {{ usage_value }}
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                    <!--|||||||||||||||||||||||-->
+                  </button>
+                {% else %}
+                  {% if config["front"]["buttons"][folder_id][button_id]["image"].startswith('http') %}
+                    {% set imagelink = config["front"]["buttons"][folder_id][button_id]["image"] %}
+                  {% elif ':' in config["front"]["buttons"][folder_id][button_id]["image"] %}
+                    {% set imagelink = "static/files/images/" + config["front"]["buttons"][folder_id][button_id]["image"].split('\\')[-1] %}
+                  {% else %}
+                    {% set imagelink = "static/files/images/" + config["front"]["buttons"][folder_id][button_id]["image"] %}
+                  {% endif %}
+                  
+                  <button {{ onclick }} class="{{class}}" role="button" style="overflow: hidden; overflow-y: hidden; max-height: 89.6px;">
+                      {% if imagelink.endswith('.svg') %}
+                        {{ open(imagelink).read().replace('<svg ','<svg style="width:' + str(112*(int(config["front"]["buttons"][folder_id][button_id]["image_size"].replace("%", "")) /100) + 3) + 'px; height:'  + str(112*(int(config["front"]["buttons"][folder_id][button_id]["image_size"].replace("%", "")) /100) + 3) + '; ' + fill + '" ') }}
+                      {% else %}
+                        <img src="{{ imagelink }}" alt="{{ imagelink }}" style="
+                          width: {{ 112*(int(config["front"]["buttons"][folder_id][button_id]["image_size"].replace("%", "")) /100) + 3}}px;
+                           {{fill}}"
+                        >
+                      {% endif %}
+                    
+                    <!--|||||||||||||||||||||||-->
+                    {% set usage_dict = {"cpu":{"usage_percent":0.0},"memory":{"total_gb":0.0,"used_gb":0.0,"available_gb":0.0,"usage_percent":0.0},"disks":{"C":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0},"D":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0},"E":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0},"F":{"total_gb":0.0,"used_gb":0.0,"free_gb":0.0,"usage_percent":0.0}},"network":{"bytes_sent":0,"bytes_recv":0},"gpus":{"0":{"name":"GPU_NAME","memory_used":0.0,"memory_total":0.0,"utilization_percent":0.0}}} %}
+                    {% if button_config['message'].startswith('/usage') %}
+                      {% set name = button_config['message'].replace("'",'"',2).split('"')[1] %}
+                      {% set path = button_config['message'].replace("'",'"',2).split('"')[2] %}
+                      {% if button_config['message'].split()[1] %}
+                        <div class="usage">
+                          <div class="usage-title {{ path.replace("'",'"').replace('"]["','.').replace('"]','').replace('["','.') }}" style="{{fill}}">
+                            {{ name }}
+                          </div>
+                          {% set usage_value = eval(path.replace("'",'"'), {'usage_dict': usage_dict}) %}
+                          <div class="usage-value {{ path.replace("'",'"').replace('"]["','.').replace('"]','').replace('["','.') }}" style="{{fill}}">
+                            {{ usage_value }}
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                    <!--|||||||||||||||||||||||-->
+                  </button>
+                {% endif %}
+              {% if config["front"]["show-names"].lower() == "true" %}
+                {% set buttontext_style = ''%}
+                {% if config["front"]["names-color"] and not config["front"]["names-color"].strip() == "" %}
+                  {% set buttontext_style = 'style="color:'+config["front"]["names-color"]+';"'%}
+                {% endif %}
+                <p class="buttontext" {{buttontext_style}}>
+                  {{ button_config['name'] }}
+                </p>
+              {% endif %}
+            </form>
+          {% else %}
+            <div class="void"></div>
+          {% endif %}
+        {% endfor %}
+        </div>
+      </div>
+    {% endfor %}
+
+
+
+    <div class="modal-container">
+      <div class="modal-content">
+
+        <div class="modal-header bold">
+          <h1 class="config-modal">Configuration</h1>
+          <div class="modal-close">
+            <svg class="config-modal" xmlns="http://www.w3.org/2000/svg" width="19" height="19" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
+            </svg>
+          </div>
+        </div>
+
+        <div class="modal-main">
+
+          <div id="config-container">
+
+            <form id="config-form">
+              <h1 class="config-title">Settings</h1>
+
+              <label for="spotify">Spotify API:</label>
+              <ul>
+                <li>
+                  <label for="spotify-USERNAME">Username</label>
+                  <input type="text" id="spotify-USERNAME" name="settings.spotify-api.USERNAME" {% if not config['settings']['spotify-api']['USERNAME'].strip() == ''%}value="{{config['settings']['spotify-api']['USERNAME']}}"{% endif %}>
+                  <br>
+                  <label for="spotify-CLIENT_ID">Client ID</label>
+                  <input type="text" id="spotify-CLIENT_ID" name="settings.spotify-api.CLIENT_ID" {% if not config['settings']['spotify-api']['CLIENT_ID'].strip() == ''%}value="{{config['settings']['spotify-api']['CLIENT_ID']}}"{% endif %}>
+                  <br>
+                  <label for="spotify-CLIENT_SECRET">Client Secret</label>
+                  <input type="text" id="spotify-CLIENT_SECRET" name="settings.spotify-api.CLIENT_SECRET" {% if not config['settings']['spotify-api']['CLIENT_SECRET'].strip() == ''%}value="{{config['settings']['spotify-api']['CLIENT_SECRET']}}"{% endif %}>
+                </li>
+              </ul>
+
+              <br>
+
+              <label for="ear-soundboard">Ear Soundboard:</label>
+              <input type="checkbox" id="ear-soundboard" name="settings.ear-soundboard" {% if config['settings']['ear-soundboard'].lower() == 'true'%}checked{% endif %}>
+              
+              <br>
+
+              <label for="mp3_method">MP3 method (if "ear soundboard" does not work):</label>
+              <select id="mp3_method" name="settings.mp3_method">
+                <option value="vlc" {% if config['settings']['mp3_method'].lower() == 'vlc' %}selected{% endif %}>VLC</option>
+                <option value="pygame" {% if config['settings']['mp3_method'].lower() == 'pygame' %}selected{% endif %}>Pygame</option>
+              </select>
+
+              <br>
+
+              <label for="show-console">Show console:</label>
+              <input type="checkbox" id="show-console" name="settings.show-console" {% if config['settings']['show-console'].lower() == 'true'%}checked{% endif %}>
+
+              
+              <h1 class="config-title">Visuals</h1>
+
+              <label for="theme">Theme:</label>
+              <select id="theme" name="front.theme">
+                {% for theme in themes %}
+                  <option value="{{theme}}" {% if config['front']['theme'].lower() == theme %}selected{% endif %}>{{theme}}</option>
+                {% endfor %}
+              </select>
+              
+              <br>
+
+              <label for="show-console">Show names under buttons:</label>
+              <input type="checkbox" id="show-names" name="front.show-names" {% if config['front']['show-names'].lower() == 'true'%}checked{% endif %}>
+              
+
+              <br><br>
+              <input type="submit" value="Save" class="modal-button">
+            </form>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+
+
+    <!---->
+    <script src="static/js/socketio.js"></script>
+    <script>
+
+      {% for folder_id, value in config["front"]["buttons"].items() %}
+      function folder_{{ folder_id }}() {
+        console.log("{{folder_id}} opened")
+        {% for folder_id2, value in config["front"]["buttons"].items() %}
+          {% if folder_id2 == folder_id %}
+            document.getElementById('folder-{{ folder_id2 }}').classList.remove('invisible');
+          {% else %}
+            document.getElementById('folder-{{ folder_id2 }}').classList.add('invisible');
+          {% endif %}
+        {% endfor %}
+      }
+      {% endfor %}
+      
+
+      function auto_resize() {
+        folder_{{biggest_folder}}();
+        const div = document.querySelector('#folder-{{biggest_folder}}');
+        let currentZoom = 1;
+
+        currentZoom = currentZoom - 3;
+        let larg = 100 / currentZoom;
+        let long = 100 / currentZoom;
+        document.body.style.transformOrigin = "left top";
+        document.body.style.transform = "scale(" + currentZoom + ")";
+        document.body.style.width = `${larg}%`;
+        document.body.style.height = `${long}%`;
+ 
+        while (true) {
+          const rect = div.getBoundingClientRect();
+          if (!(rect.right > window.innerWidth || rect.bottom > window.innerHeight)) {
+            //console.log('La div ne dépasse pas de l\'écran à droite ou en bas !');
+            currentZoom = currentZoom + 0.1; // ici tu peux mettre 0.1 si c'est trop long
+            let larg = 100 / currentZoom;
+            let long = 100 / currentZoom;
+            document.body.style.transformOrigin = "left top";
+            document.body.style.transform = "scale(" + currentZoom + ")";
+            document.body.style.width = `${larg}%`; //pour etre sur que ça s'adapte à la taille de l'écran
+            document.body.style.height = `${long}%`;
+          } else {
+              folder_{{str(config["front"]["buttons"].keys()).split("'")[1]}}();
+            break;
+          }
+        }
+        while (true) {
+          const rect = div.getBoundingClientRect();
+          if (rect.right > window.innerWidth || rect.bottom > window.innerHeight) {
+            //console.log('La div dépasse de l\'écran à droite ou en bas !');
+            currentZoom = currentZoom - 0.05; // ici tu peux mettre 0.1 si c'est trop long
+            let larg = 100 / currentZoom;
+            let long = 100 / currentZoom;
+            document.body.style.transformOrigin = "left top"; //tu peux changer center top mais après ça marche moins
+            document.body.style.transform = "scale(" + currentZoom + ")";
+            document.body.style.width = `${larg}%`;
+            document.body.style.height = `${long}%`;
+          } else {
+              folder_{{str(config["front"]["buttons"].keys()).split("'")[1]}}();
+            break;
+          }
+        }
+      }
+
+      window.addEventListener('load', function() {
+        folder_{{str(config["front"]["buttons"].keys()).split("'")[1]}}();
+        auto_resize();
+        // SOCKET CONNECTION
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('connect', function() {
+          console.log('Connected');
+        });
+        
+        socket.on('json_data', function(data) {
+          console.log(data.message);
+        });
+
+        const usageValueDivs = document.querySelectorAll('.usage-value');
+        if (usageValueDivs.length > 0) {
+          setInterval(function() {
+            //console.log('interval');
+            // Récupérer tous les formulaires avec un champ input qui commence par "/usage" et contient "cpu usage_percent"
+            const forms = document.querySelectorAll('form');
+            const messages = [];
+
+            // Récupérer les messages de chaque formulaire
+            forms.forEach(form => {
+              const messageElement = form.querySelector('.message');
+              if (messageElement) {
+                const message = messageElement.value;
+                messages.push({ form: form, message: message });
+              }
+            });
+
+          
+            // Effectuer une requête fetch pour tous les messages et mettre à jour les éléments DOM correspondants
+            fetch('/usage', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ messages: messages })
+            })
+            .then(response => response.json())
+            .then(usage_dict => {
+              // console.log(typeof(usage_dict));
+              // console.log(usage_dict);
+              forms.forEach(form => {
+                const divElements = document.querySelectorAll('.usage-value');
+                divElements.forEach(divElement => {
+                  const otherClass = divElement.classList[1];
+                  if (otherClass !== undefined) {
+                    try {
+                      let newValue
+                      if (otherClass.includes('percent')) {
+                        newValue = eval(otherClass) + '%';
+                      } else if (otherClass.includes('_gb')) {
+                        newValue = eval(otherClass) + ' gb';
+                      } else if (otherClass.includes('_mb')) {
+                        newValue = eval(otherClass) + ' mb';
+                      } else if (otherClass.includes('bytes')) {
+                        newValue = eval(otherClass) + ' bytes';
+                      } else {
+                        newValue = eval(otherClass);
+                      }
+                      if (!newValue.includes('undefined')) {
+                        divElement.innerHTML = newValue
+                      }
+                    } catch (error) {
+                      return
+                    }
+                  }
+                });
+              });
+            })
+            .catch(error => console.error(error));
+          }, {{config['front']['computer-usage-reload-time'] }} );
+        }
+      });
+
+      document.addEventListener('DOMContentLoaded', function() {
+        var loadingScreen = document.getElementById("loading-screen");
+        setTimeout(function() {
+          loadingScreen.classList.add("hidden");
+          setTimeout(function() {
+            loadingScreen.remove();
+          }, 1000);
+        }, 1000);
+        
+        // ?modal=show
+        const urlParams = new URLSearchParams(window.location.search);
+        const modalParam = urlParams.get('config');
+        if (modalParam === 'show') {
+          const modal = document.querySelector('.modal-container');
+          modal.style.opacity = '1';
+          modal.style.display = 'block';
+        }
+
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+          form.addEventListener('submit', function(event) {
+            event.preventDefault(); 
+            const messageElement = form.querySelector('.message');
+            if (!messageElement) {
+              // -----------------------------------------------------------
+
+              console.log('sending config-form...');
+
+              var config_dataTemp = {};
+              var inputs = document.querySelectorAll('#config-form input, #config-form select');
+              inputs.forEach(function(input) {
+                  var name = input.name;
+                  var value;
+                  if (input.type === 'checkbox') {
+                      value = input.checked ? 'true' : 'false';
+                  } else {
+                      value = input.value;
+                  }
+                  config_dataTemp[name] = value;
+              });
+
+              console.log(config_dataTemp);
+
+              let config_data = {};
+
+              for (let key in config_dataTemp) {
+                  if (key === "") continue; // Ignorer la clé sans nom
+
+                  let keys = key.split(".");
+                  let obj = config_data;
+
+                  for (let i = 0; i < keys.length; i++) {
+                      if (!obj.hasOwnProperty(keys[i])) {
+                          obj[keys[i]] = {};
+                      }
+
+                      if (i === keys.length - 1) {
+                          obj[keys[i]] = config_dataTemp[key];
+                      }
+
+                      obj = obj[keys[i]];
+                  }
+              }
+
+              console.log(config_data);
+
+              fetch('/save_config', {
+                  method: 'POST',
+                  headers: {
+                      'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify(config_data)
+              })
+              .then(function(response) {
+                  if (response.ok) {
+                      // Le serveur a enregistré les données avec succès
+                      return response.json();
+                  } else {
+                      // Le serveur a retourné une erreur
+                      throw new Error('Une erreur est survenue lors de l\'enregistrement des paramètres.');
+                  }
+              })
+              .then(function(response) {
+                  if (response.success) {
+                      // Le serveur a enregistré les données avec succès
+                      alert('Les paramètres ont été enregistrés avec succès.');
+                  } else {
+                      // Le serveur a retourné une erreur
+                      alert('Une erreur est survenue lors de l\'enregistrement des paramètres.');
+                  }
+              })
+              .catch(function(error) {
+                  // Une erreur s'est produite
+                  alert(error.message);
+              });
+
+              // -----------------------------------------------------------
+
+            } else {
+              const message = messageElement.value;
+              if (!message.startsWith("/usage") && !message.startsWith("/reload") && !message.startsWith("/folder")) {
+                fetch('/send-data', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(data => console.log(data))
+                .catch(error => console.error(error));
+              } else if (message.startsWith("/reload")) {
+                console.log('reloading...');
+                location.reload();
+              } else {
+                fetch('/usage', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({ message: message })
+                })
+                .then(response => response.json())
+                .then(usage_dict => {
+                  // console.log(typeof(usage_dict));
+                  // console.log(usage_dict);
+                  const divElements = document.querySelectorAll('.usage-value');
+                  divElements.forEach(divElement => {
+                    const otherClass = divElement.classList[1];
+                    if (otherClass !== undefined) {
+                      try {
+                        let newValue
+                        if (otherClass.includes('percent')) {
+                          newValue = eval(otherClass) + '%';
+                        } else if (otherClass.includes('_gb')) {
+                          newValue = eval(otherClass) + ' gb';
+                        } else if (otherClass.includes('_mb')) {
+                          newValue = eval(otherClass) + ' mb';
+                        } else if (otherClass.includes('bytes')) {
+                          newValue = eval(otherClass) + ' bytes';
+                        } else {
+                          newValue = eval(otherClass);
+                        }
+                        if (!newValue.includes('undefined')) {
+                          divElement.innerHTML = newValue
+                        }
+                      } catch (error) {
+                        return
+                      }
+                    }
+                  });
+                })
+                .catch(error => console.error(error));
+              }
+            }
+          });
+        });
+
+
+
+        // Sélectionner tous les boutons qui ont la classe open-modal
+        let open_modal_buttons = document.querySelectorAll(".open-modal");
+
+        // Sélectionner le conteneur de la modal
+        let modal = document.querySelector(".modal-container");
+
+        // Sélectionner le bouton de fermeture de la modal
+        let modal_close_button = document.querySelector(".modal-close");
+
+        function show_modal() {
+          modal.style.opacity = "100%";
+          modal.style.display = "block";
+        }
+        function hide_modal() {
+          let intervalId = setInterval(function() {
+            let currentOpacity = parseFloat(getComputedStyle(modal).opacity);
+            if (currentOpacity <= 0) {
+              // L'animation est terminée, cacher la modal
+              clearInterval(intervalId);
+              setTimeout(function() {
+                modal.style.display = "none";
+              }, 100); // Attendre avant de cacher la modal
+              return;
+            }
+            modal.style.opacity = (currentOpacity - 3.5).toFixed(2);
+          }, 10); // Répéter toutes les 0.01s (10ms)
+        }
+
+        // Ajouter un écouteur d'événement sur chaque bouton pour ouvrir la modal
+        for (let button of open_modal_buttons) {
+          button.addEventListener("click", function() {
+            show_modal();
+          });
+        }
+
+        // Ajouter un écouteur d'événement sur le bouton de fermeture pour fermer la modal
+        modal_close_button.addEventListener("click", function() {
+          hide_modal();
+        });
+
+        // Ajouter un écouteur d'événement sur la modal pour la fermer en cliquant en dehors
+        modal.addEventListener("click", function(event) {
+          if (event.target === modal) {
+            hide_modal();
+          }
+        });
+
+
+
+
+
+
+
+    
+
+
+
+
+
+        // fullscreen
+        const fullscreenBtn = document.querySelector('.fullscreen-btn');
+        const zoomInBtn = document.querySelector('.zoom-in-btn');
+        const zoomOutBtn = document.querySelector('.zoom-out-btn');
+        const buttonsCenter = document.querySelector('.buttons-center');
+        const shrinkBtn = document.querySelector('.shrink-btn');
+        const expandBtn = document.querySelector('.expand-btn');
+        const dezoomBtn = document.querySelector('.dezoom-btn');
+        const zoomBtn = document.querySelector('.zoom-btn');
+        fullscreenBtn.addEventListener('click', () => {
+          if (document.fullscreenEnabled) {
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            } else {
+              if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+              } else if (document.documentElement.webkitRequestFullscreen) { /* Safari */
+                document.documentElement.webkitRequestFullscreen();
+              } else if (document.documentElement.msRequestFullscreen) { /* IE11 */
+                document.documentElement.msRequestFullscreen();
+              }
+            }
+            auto_resize();
+          } else {
+            console.log('Fullscreen mode not supported');
+          }
+        });
+
+
+        try {
+          let scale = 1;
+          zoomInBtn.addEventListener('click', () => {
+            scale += 0.1;
+            document.documentElement.style.transform = `scale(${scale})`;
+          });
+        } catch (error) {}
+          
+        try {
+          zoomOutBtn.addEventListener('click', () => {
+            scale -= 0.1;
+            document.documentElement.style.transform = `scale(${scale})`;
+          });
+        } catch (error) {}
+          
+        try {
+          shrinkBtn.addEventListener('click', () => {
+            const currentMargin = parseInt(getComputedStyle(buttonsCenter).marginLeft);
+            buttonsCenter.style.marginLeft = `${currentMargin + 1}px`;
+            buttonsCenter.style.marginRight = `${currentMargin + 1}px`;
+          });
+        } catch (error) {}
+
+        try {
+          expandBtn.addEventListener('click', () => {
+            const currentMargin = parseInt(getComputedStyle(buttonsCenter).marginLeft);
+            buttonsCenter.style.marginLeft = `${currentMargin - 1}px`;
+            buttonsCenter.style.marginRight = `${currentMargin - 1}px`;
+          });
+        } catch (error) {}
+        
+        
+        const cols = '{{config["front"]["width"]}}';
+        const rows = '{{config["front"]["height"]}}';
+
+        // Convertir les parties en nombres entiers
+        const maxRows = parseInt(rows);
+        const maxCols = parseInt(cols);
+
+        // Récupérer la taille d'une petite div
+        const smallDiv = document.querySelector('.form-0');
+        const smallDivStyles = getComputedStyle(smallDiv);
+        const smallDivWidth = parseInt(smallDivStyles.width) + parseInt(smallDivStyles.paddingLeft) + parseInt(smallDivStyles.paddingRight);
+        const smallDivHeight = parseInt(smallDivStyles.height) + parseInt(smallDivStyles.paddingTop) + parseInt(smallDivStyles.paddingBottom);
+
+        // Calculer la limite de la grande div en fonction de la taille de la petite div
+        const maxDivs = maxRows * maxCols;
+        const maxWidth = maxCols * smallDivWidth + 10;
+
+        // Récupérer la grande div et modifier sa largeur avec les marges
+        const bigDivs = document.querySelectorAll('[id^="folder-"].buttons-center');
+        bigDivs.forEach((bigDiv) => {
+          bigDiv.style.maxWidth = `${maxWidth}px`;
+        });
+
+        // REDIMENTIONNER LES DIVS POUR S'AJUSTER A LA TAILLE DE L'ECRAN
+
+        var currentZoom = 1;
+        
+        try {
+          dezoomBtn.addEventListener('click', () => {
+            currentZoom = currentZoom - 0.05; // ici tu peux mettre 0.1 si c'est trop long
+            let larg = 100 / currentZoom;
+            let long = 100 / currentZoom;
+            document.body.style.transformOrigin = "left top"; //tu peux changer center top mais après ça marche moins
+            document.body.style.transform = "scale(" + currentZoom + ")";
+            document.body.style.width = `${larg}%`;
+            document.body.style.height = `${long}%`;
+          });
+        } catch (error) {}
+
+        try {
+          zoomBtn.addEventListener('click', () => {
+            currentZoom = currentZoom + 0.05; // ici tu peux mettre 0.1 si c'est trop long
+            let larg = 100 / currentZoom;
+            let long = 100 / currentZoom;
+            document.body.style.transformOrigin = "left top";
+            document.body.style.transform = "scale(" + currentZoom + ")";
+            document.body.style.width = `${larg}%`; //pour etre sur que ça s'adapte à la taille de l'écran
+            document.body.style.height = `${long}%`;
+          });
+        } catch (error) {}
+
+        addEventListener("resize", (event) => {});
+          onresize = (event) => {
+            auto_resize();
+        };
+
+         /* Empêcher le défilement */
+        document.addEventListener('touchmove', function(e) {
+          if (!e.target.closest('.modal-content')) {
+            e.preventDefault();
+          }
+        }, { passive: false }); // Empêcher le défilement sur les appareils mobiles
+        
+        document.addEventListener('wheel', function(e) {
+          e.preventDefault();
+        }); // Empêcher le défilement sur les ordinateurs
+
+         
+
+         
+
+         
+
+         
+        
+
+         
+        // Get the button element in the form
+        //onst button = form.querySelector('.button');
+        
+        //  let buttonClicked = false;
+        //  // Définissez une fonction qui vérifie l'état de l'événement touchend
+        //  function checkTouchEnd() {
+        //    if (buttonClicked) {
+        //      button.classList.add('activee');
+        //      console.log("added")
+        //    }
+        //    else {
+        //      button.classList.remove('activee');
+        //      console.log("removed")
+        //    }
+        //  }
+        //  // Utilisez setInterval pour exécuter la fonction toutes les 0,1 secondes
+        //  setInterval(checkTouchEnd, 300);
+        
+
+        const print1 = document.getElementById('print1');
+        const print2 = document.getElementById('print2');
+        
+        //  // Add the mousedown event handler
+        //  button.addEventListener('mousedown', function() {
+        //    print2.innerHTML = 'mouseup: not active';
+        //  });
+
+         //  // Add the mouseup event handler
+        //  button.addEventListener('mouseup', function() {
+        //    print2.innerHTML = 'mouseup: active';
+        //  });
+
+         //  
+        //  // Add the touchstart event handler
+        //  button.addEventListener('touchstart', function() {
+        //    buttonClicked = true;
+        //    print1.innerHTML = 'touchstart: active';
+        //  });
+
+         //  // Add the touchend event handler
+        //  button.addEventListener('touchend', function() {
+        //    buttonClicked = false;
+        //    print1.innerHTML = 'touchstart: not active';
+        //  });
+      
+      });
+      
+
+    </script>
+    
+    
+    
+  </body>
+</html>

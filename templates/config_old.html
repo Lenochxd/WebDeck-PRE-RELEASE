@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Paramètres</title>
+    <style>
+        /* Ajoutez quelques styles CSS de base */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: lightgray;
+        }
+        input[type="checkbox"] {
+            width: auto;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form action="/submit" method="post">
+            <table>
+                <tr>
+                    <th colspan="2">Paramètres</th>
+                </tr>
+                <tr>
+                    <td>ear-soundboard</td>
+                    <td>
+                        <input type="checkbox" name="ear-soundboard"{% if config_json['settings']['ear-soundboard'] == "true" %}checked{% endif %}>
+                    </td>
+                </tr>
+                <tr>
+                    <td>mp3_method</td>
+                    <td>
+                        <select name="mp3_method">
+                            <option value="vlc" {% if config_json['settings']['mp3_method'] == "vlc" %}selected{% endif %}>vlc</option>
+                            <option value="pygame"{% if config_json['settings']['mp3_method'] == "pygame" %}selected{% endif %}>pygame</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                  <td>dev-mode</td>
+                  <td><input type="checkbox" name="dev-mode" {% if config_json['settings']['dev-mode'] == "true" %}checked{% endif %}></td>
+              </tr>
+              <tr>
+                  <th colspan="2">Front</th>
+              </tr>
+              <tr>
+                  <td>theme</td>
+                  <td><input type="text" name="theme" value="{{ config_json['front']['theme'] }}"></td>
+              </tr>
+              <tr>
+                  <td>show_names</td>
+                  <td><input type="checkbox" name="show_names" {% if config_json['front']['show_names'] == "true" %}checked{% endif %}></td>
+              </tr>
+              <tr>
+                  <th colspan="2">Buttons</th>
+              </tr>
+              <tr>
+                  <td>index</td>
+                  <td>
+                      <table>
+                          {% for button in config_json['front']['buttons']['index'] %}
+                          <tr>
+                              <td>{{ button['name'] }}</td>
+                              <td><input type="text" name="{{ button['name'] }}_image" value="{{ button['image'] }}"></td>
+                              <td><input type="text" name="{{ button['name'] }}_image_size" value="{{ button['image_size'] }}"></td>
+                              <td><input type="text" name="{{ button['name'] }}_message" value="{{ button['message'] }}"></td>
+                          </tr>
+                          {% endfor %}
+                      </table>
+                  </td>
+              </tr>
+              <tr>
+                <td>soundboard</td>
+                <td>
+                  <table>
+                    {% for button in config_json['front']['buttons']['soundboard'] %}
+                    <tr>
+                      <td>{{ button['name'] }}</td>
+                      <td><input type="text" name="{{ button['name'] }}_image" value="{{ button['image'] }}"></td>
+                      <td><input type="text" name="{{ button['name'] }}_image_size" value="{{ button['image_size'] }}"></td>
+                      <td><input type="text" name="{{ button['name'] }}_message" value="{{ button['message'] }}"></td>
+                    </tr>
+                    {% endfor %}
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2" style="text-align:center;">
+                  <input type="submit" value="Sauvegarder">
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
+      </body>
+    </html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Stream Deck Config</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <style>
+      /* Add custom styles here */
+      #settings-container {
+        width: 500px;
+        margin: 0 auto;
+        padding: 20px;
+        border: 1px solid gray;
+        border-radius: 10px;
+      }
+
+      #button-editor-container {
+        width: 500px;
+        margin: 20px auto;
+        text-align: center;
+      }
+
+      #button-editor {
+        width: 500px;
+        margin: 20px auto;
+        padding: 20px;
+        border: 1px solid gray;
+        border-radius: 10px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="settings-container">
+      <h1>Settings</h1>
+      <form id="settings-form">
+        <label for="ear-soundboard">Ear-Soundboard:</label>
+        <input type="checkbox" id="ear-soundboard" name="ear-soundboard" {% if config['settings']['ear-soundboard'] == 'True'%}checked{% endif %}>
+        <br>
+        <label for="mp3_method">MP3 Method:</label>
+        <select id="mp3_method" name="mp3_method">
+          <option value="vlc" {% if config['settings']['mp3_method'] == 'vlc' %}selected{% endif %}>VLC</option>
+          <option value="pygame" {% if config['settings']['mp3_method'] == 'pygame' %}selected{% endif %}>Pygame</option>
+        </select>
+        <br>
+        <label for="dev-mode">show-names:</label>
+        <input type="checkbox" id="show-names" name="show-names" {% if config['front']['show-names'] == 'True'%}checked{% endif %}>
+        <br>
+        <label for="dev-mode">Dev Mode:</label>
+        <input type="checkbox" id="dev-mode" name="dev-mode" {% if config['settings']['dev-mode'] == 'True'%}checked{% endif %}>
+        <br><br>
+        <input type="submit" value="Save">
+      </form>
+    </div>
+    <div id="button-editor-container">
+      <button id="button-editor-open">Edit Buttons</button>
+      <div id="button-editor">
+        <h1>Button Editor</h1>
+        <form id="button-form">
+          <label for="folder">Folder:</label>
+          <select id="folder" name="folder">
+            {% for folder in config['front']['buttons'] %}
+              <option value="{{ folder }}">{{ folder }}</option>
+            {% endfor %}
+          </select>
+          <br>
+          <label for="name">Name:</label>
+          <input type="text" id="name" name="name">
+          <br>
+          <label for="image">Image:</label>
+          <input type="text" id="image" name="image">
+         
+          <br>
+          <label for="image_size">Image Size:</label>
+          <input type="text" id="image_size" name="image_size">
+          <br>
+          <label for="message">Message:</label>
+          <input type="text" id="message" name="message">
+          <br><br>
+          <input type="submit" value="Save">
+        </form>
+        <button id="button-editor-close">Close</button>
+      </div>
+    </div>
+
+
+    
+
+
+    <script>
+      // Open button editor on click
+      $("#button-editor-open").click(function() {
+        $("#button-editor").show();
+      });
+
+      // Close button editor on click
+      $("#button-editor-close").click(function() {
+        $("#button-editor").hide();
+      });
+
+      // Handle form submission
+      $("#settings-form").submit(function(e) {
+        e.preventDefault();
+
+        var formData = {
+          'ear-soundboard': $("#ear-soundboard").prop("checked"),
+          'mp3_method': $("#mp3_method").val(),
+          'show-names': $("#show-names").prop("checked"),
+          'dev-mode': $("#dev-mode").prop("checked")
+        };
+
+        $.ajax({
+          type: "POST",
+          url: "/config/settings",
+          data: JSON.stringify(formData),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function(data) {
+            alert("Settings saved!");
+          }
+        });
+      });
+
+      $("#button-form").submit(function(e) {
+        e.preventDefault();
+
+        var formData = {
+          'folder': $("#folder").val(),
+          'name': $("#name").val(),
+          'image': $("#image").val(),
+          'image_size': $("#image_size").val(),
+          'message': $("#message").val()
+          };
+          $.ajax({
+            type: "POST",
+            url: "/config/buttons",
+            data: JSON.stringify(formData),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function(data) {
+              alert("Button saved!");
+            }
+          });
+        });
+      </script>
+    </body>
+  </html>
