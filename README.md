@@ -3,7 +3,7 @@
 Le WebDeck est une application Flask qui permet à l'utilisateur de contrôler son ordinateur à distance depuis n'importe quel appareil doté d'un navigateur et d'un écran tactile. Contrairement au StreamDeck d'Elgato, qui nécessite un équipement physique, le WebDeck utilise une application Flask que l'utilisateur héberge sur son propre ordinateur.
 
 ## Installation
-1. Clonez le dépôt git en utilisant la `git clone https://github.com/LeLenoch/WebDeck-PRE-RELEASE.git` ou en téléchargant le [fichier ZIP](https://github.com/LeLenoch/WebDeck-PRE-RELEASE/archive/refs/heads/main.zip)
+1. Clonez le dépôt git en utilisant `git clone https://github.com/LeLenoch/WebDeck-PRE-RELEASE.git` ou en téléchargant le [fichier ZIP](https://github.com/LeLenoch/WebDeck-PRE-RELEASE/archive/refs/heads/main.zip)
 
 2. Accédez au dossier du projet : `cd webdeck`
 
