@@ -52,7 +52,7 @@
                     "name": "ETEINDRE ECRANS",
                     "position": "a5",
                     "image": "screensaver.png",
-                    "image_size": "100%",
+                    "image_size": "50%",
                     "message": "/screensaver"
                 },
                 {
