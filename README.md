@@ -296,7 +296,7 @@ Exemple du fichier json:
 
 ## Commpatibilité
 
-- [https://bishokus.fr/webdeck/test-it](https://bishokus.fr/webdeck/test-it)\
+- https://bishokus.fr/webdeck/test-it
 - [Google Sheets](https://docs.google.com/spreadsheets/d/1tyfyFJzIdrOl0-Y6wBXaq9EXqViVVCEJu4zQ2-VMGgM/edit#gid=0)
 
 |Type         |Marque     |Appareil                |Date de sortie|Modèle       |Version de l'OS   |Navigateur           |Version du navigateur       |Note (%)|Testé par           |Date      |Comment                                                                                                                                                                                                                                                                                                                 |
