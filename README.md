@@ -30,7 +30,7 @@ Les paramètres de configuration suivants sont disponibles:
 Les paramètres de configuration de l'interface utilisateur suivants sont disponibles:
 
 - `theme`: spécifie le thème à utiliser pour l'interface utilisateur. Le nom du fichier CSS doit être spécifié.
-- `background`: spécifie l'image à utiliser comme arrière-plan de l'interface utilisateur.
+- `background`: spécifie l'image ou la couleur (css) à utiliser comme arrière-plan de l'interface utilisateur.
 - `show-names`: active ou désactive l'affichage des noms des boutons. Valeurs valides: `"true"` ou `"false"`.
 - `names-color`: spécifie la couleur du texte pour les noms de boutons.
 - `computer-usage-reload-time`: spécifie le temps en millisecondes entre chaque rafraîchissement des informations d'utilisation de l'ordinateur.
@@ -42,12 +42,12 @@ Chaque bouton est défini par un objet dans le tableau `buttons`. Les champs sui
 - `name`: le nom à afficher sur le bouton.
 - `position`: la position du bouton sur la grille (par exemple, "a1", "b2", etc.).
 - `image`: l'image à afficher sur le bouton.
-- `image_size`: la taille de l'image. Peut être spécifié en pourcentage ou en pixels.
+- `image_size`: la taille de l'image en pourcentage.
 - `background-color`: la couleur de fond du bouton.
 - `color`: la couleur du texte sur le bouton.
 - `message`: la commande à exécuter lorsque le bouton est pressé.
 
-Pour configurer les boutons, modifiez simplement le fichier `config_example.json` en fonction de vos besoins.
+Pour configurer les boutons, modifiez simplement le fichier `config.json` en fonction de vos besoins.
 
 ## Commandes disponibles
 
