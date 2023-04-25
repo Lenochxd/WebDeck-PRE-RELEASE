@@ -16,7 +16,7 @@ Le WebDeck est une application Flask qui permet à l'utilisateur de contrôler s
 
 ## Configuration
 
-La configuration des boutons se fait dans un fichier JSON. Voici un exemple de fichier `config_example.json`:
+La configuration des boutons se fait dans un fichier JSON. Un exemple de fichier `config.json` est disponible en bas de cette page.
 
 
 Les paramètres de configuration suivants sont disponibles:
