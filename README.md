@@ -1,6 +1,18 @@
 # WebDeck
 
-Le WebDeck est une application Flask qui permet à l'utilisateur de contrôler un ordinateur à distance à partir de n'importe quel appareil avec un navigateur et un écran tactile. Il est similaire au Stream Deck d'Elgato, mais il fonctionne avec une application Flask que l'utilisateur héberge sur son ordinateur.
+Le WebDeck est une application Flask qui permet à l'utilisateur de contrôler son ordinateur à distance depuis n'importe quel appareil doté d'un navigateur et d'un écran tactile. Contrairement au StreamDeck d'Elgato, qui nécessite un équipement physique, le WebDeck utilise une application Flask que l'utilisateur héberge sur son propre ordinateur.
+
+## Installation
+1. Clonez le dépôt git en utilisant la `git clone https://github.com/LeLenoch/WebDeck-PRE-RELEASE.git` ou en téléchargant le [fichier ZIP](https://github.com/LeLenoch/WebDeck-PRE-RELEASE/archive/refs/heads/main.zip)
+
+2. Accédez au dossier du projet : `cd webdeck`
+
+3. Installez les dépendances nécessaires avec `pip install -r requirements.txt`
+
+4. Exécutez le programme en utilisant `python main.py`
+
+5. Ouvrez votre navigateur web préféré sur votre appareil et accédez à l'URL suivante : http://IP:PORT/, remplacer IP par l'ip locale de votre ordinateur (s'affiche lors du lancement du programme) et le PORT par le port inscrit tout en bas de config.json (par défaut 5000)
+
 
 ## Configuration
 
