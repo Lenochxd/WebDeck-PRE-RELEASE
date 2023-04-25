@@ -11,7 +11,7 @@ Le WebDeck est une application Flask qui permet à l'utilisateur de contrôler s
 
 4. Exécutez le programme en utilisant `python main.py`
 
-5. Ouvrez votre navigateur web préféré sur votre appareil et accédez à l'URL suivante : http://IP:PORT/, remplacer IP par l'ip locale de votre ordinateur (s'affiche lors du lancement du programme) et le PORT par le port inscrit tout en bas de config.json (par défaut 5000)
+5. Ouvrez votre navigateur web préféré sur votre appareil et accédez à l'URL http://IP:PORT/, remplacez IP par l'ip locale de votre ordinateur (s'affiche lors du lancement du programme) et le PORT par le port inscrit tout en bas de config.json (par défaut 5000)
 
 
 ## Configuration
