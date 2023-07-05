@@ -61,11 +61,15 @@ Les commandes suivantes sont disponibles pour les boutons:
 - `/volume +` : augmente de 1 le volume de windows
 - `/volume -` : baisse de 1 le volume de windows
 - `/volume set <nombre>` : change le volume de windows
+- `/soundcontrol mute` : coupe le volume de windows
+- `/mediacontrol playpause` : alterne entre play et pause sur windows
+- `/mediacontrol previous` : joue le son précédent
+- `/mediacontrol next` : joue le son suivant
 - `/spotify likesong` : mettre le son actuellement joué sur spotify en favoris
 - `/spotify likealbum` : mettre l'album actuellement joué sur spotify en favoris
-- `/spotify add_or_remove` : ajoute ou retire le son actuellement joué dans la playlist spécifiée
+- `/spotify add_or_remove <nom de la playlist>` : ajoute ou retire le son actuellement joué dans la playlist spécifiée
 - `/spotify add_to_playlist <nom de la playlist>` : ajoute le son actuellement joué dans la playlist spécifiée
-- `/spotify remove_from_playlist` : retire le son actuellement joué dans la playlist spécifiée
+- `/spotify remove_from_playlist <nom de la playlist>` : retire le son actuellement joué dans la playlist spécifiée
 - `/spotify follow_or_unfollow_artist` : s'abonne ou se désabonne de l'artiste actuellement joué
 - `/spotify follow_artist` : s'abonner à l'artiste actuellement écouté
 - `/spotify unfollow_artist` : se désabonner de l'artiste actuellement en écoute
